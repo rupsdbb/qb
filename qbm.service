@@ -1,0 +1,22 @@
+# Example systemd unit. Adjust User and the paths, then:
+#   sudo cp qbm.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now qbm
+[Unit]
+Description=qbm - small-screen PWA for qBittorrent-nox
+After=network-online.target qbittorrent-nox.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=qbm
+WorkingDirectory=/opt/qbm
+EnvironmentFile=/opt/qbm/.env
+ExecStart=/opt/qbm/qbm
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

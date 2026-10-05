@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f3f4f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101114" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="app.css">
+<title>qb</title>
+</head>
+<body>
+
+<header class="top">
+    <div class="top-row">
+        <span id="conn" class="dot" title="Connection"></span>
+        <div class="speeds">
+            <div><span class="down" id="g-down">↓ –</span> <span class="up" id="g-up">↑ –</span></div>
+            <span id="g-free" class="muted small"></span>
+        </div>
+        <button id="alt-btn" class="icon-btn" type="button" aria-label="Alternative speed limits" aria-pressed="false">🐢</button>
+        <button id="search-btn" class="icon-btn" type="button" aria-label="Search">⌕</button>
+    </div>
+    <input id="search" class="search" type="search" placeholder="Filter by name" hidden autocomplete="off">
+    <nav class="chips" id="chips" aria-label="Filter">
+        <button type="button" data-f="all" class="chip on">All <b></b></button>
+        <button type="button" data-f="active" class="chip">Active <b></b></button>
+        <button type="button" data-f="dl" class="chip">Downloading <b></b></button>
+        <button type="button" data-f="seed" class="chip">Seeding <b></b></button>
+        <button type="button" data-f="done" class="chip">Completed <b></b></button>
+        <button type="button" data-f="paused" class="chip">Paused <b></b></button>
+        <button type="button" data-f="error" class="chip">Errored <b></b></button>
+    </nav>
+</header>
+
+<main id="list" aria-live="polite"></main>
+<p id="empty" class="empty" hidden></p>
+
+<button id="fab" class="fab" type="button" aria-label="Add torrent">+</button>
+
+<template id="row-tpl">
+    <article class="row" tabindex="0">
+        <div class="row-name"></div>
+        <div class="bar"><i></i></div>
+        <div class="row-meta">
+            <span class="state"></span>
+            <span class="pct"></span>
+            <span class="rate"></span>
+            <span class="eta"></span>
+        </div>
+    </article>
+</template>
+
+<dialog id="add-sheet" class="sheet">
+    <form id="add-form" method="dialog">
+        <div class="grab"></div>
+        <h2>Add torrent</h2>
+        <textarea id="add-urls" name="urls" rows="3" placeholder="Magnet links, torrent URLs or info-hashes — one per line" autocomplete="off" spellcheck="false"></textarea>
+        <div class="add-tools">
+            <button id="paste-btn" type="button">Paste</button>
+            <label class="file-btn">
+                <input id="add-files" type="file" accept=".torrent,application/x-bittorrent" multiple>
+                <span id="file-label">.torrent file…</span>
+            </label>
+        </div>
+        <div class="add-opts">
+            <select id="add-cat" aria-label="Category"><option value="">No category</option></select>
+            <label class="check"><input id="add-paused" type="checkbox"> Start paused</label>
+        </div>
+        <div class="sheet-actions">
+            <button type="button" data-close>Cancel</button>
+            <button id="add-submit" type="submit" class="primary">Add</button>
+        </div>
+        <button id="handler-btn" type="button" class="link" hidden>Open magnet links with this app</button>
+    </form>
+</dialog>
+
+<dialog id="detail-sheet" class="sheet">
+    <div class="grab"></div>
+    <h2 id="d-name"></h2>
+    <div class="bar big"><i id="d-bar"></i></div>
+    <dl class="grid" id="d-grid"></dl>
+    <div class="actions" id="d-actions">
+        <button type="button" data-act="toggle" id="d-toggle">Pause</button>
+        <button type="button" data-act="force_start">Force start</button>
+        <button type="button" data-act="recheck">Recheck</button>
+        <button type="button" data-act="reannounce">Reannounce</button>
+        <button type="button" data-act="copy">Copy magnet</button>
+        <button type="button" data-act="ask-delete" class="danger">Delete…</button>
+    </div>
+    <div class="actions confirm" id="d-confirm" hidden>
+        <p>Delete this torrent?</p>
+        <button type="button" data-act="delete">Keep files</button>
+        <button type="button" data-act="delete_files" class="danger">Delete files too</button>
+        <button type="button" data-act="cancel-delete">Cancel</button>
+    </div>
+</dialog>
+
+<div id="toast" role="status"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
